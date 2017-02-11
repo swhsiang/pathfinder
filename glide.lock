@@ -1,11 +1,15 @@
-hash: b730d324b04872bfefe797d555529a6dc07b55991401cdbd56d5af50f47d2ac7
-updated: 2016-11-07T12:22:36.077433798+01:00
+hash: eaec8facb58cd6f7f94bfd6868455fc87a04b4099365f6ffc31820ef3d95aa96
+updated: 2017-02-11T19:19:33.457644579+08:00
 imports:
 - name: github.com/go-kit/kit
-  version: 6fb874ce59bb45b2f60ee3d289829db02142ecc6
+  version: f66b0e13579bfc5a48b9e2a94b1209c107ea1f41
   subpackages:
   - endpoint
   - log
+  - metrics
+  - metrics/generic
+  - metrics/influx
+  - metrics/internal/lv
   - transport/http
 - name: github.com/go-logfmt/logfmt
   version: 538518f3a61c040f3d15f05decfffef6bd0302bc
@@ -14,9 +18,17 @@ imports:
 - name: github.com/gorilla/context
   version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
 - name: github.com/gorilla/mux
-  version: 0eeaf8392f5b04950925b8a69fe70f110fa7cbfc
+  version: 392c28fe23e1c45ddba891b0320b3b5df220beea
+- name: github.com/influxdata/influxdb
+  version: afbfa0086fc0d5b6e2755c5169a381186c27db86
+  subpackages:
+  - client/v2
+  - models
+  - pkg/escape
 - name: github.com/kr/logfmt
   version: b84e30acd515aadc4b783ad4ff83aff3299bdfe0
+- name: github.com/VividCortex/gohistogram
+  version: 51564d9861991fb0ad0f531c99ef602d0f9866e6
 - name: golang.org/x/net
   version: 55a3084c9119aeb9ba2437d595b0a7e9cb635da9
   subpackages:

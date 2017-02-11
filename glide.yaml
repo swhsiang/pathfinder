@@ -11,3 +11,7 @@ import:
 - package: golang.org/x/net
   subpackages:
   - context
+- package: github.com/influxdata/influxdb
+  version: ^1.2.1-rc3
+  subpackages:
+  - client/v2
