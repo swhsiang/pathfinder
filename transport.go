@@ -14,7 +14,7 @@ import (
 
 var errInvalidArgument = errors.New("invalid argument")
 
-func MakeHTTPHandler(ctx context.Context, ps PathService, logger log.Logger) http.Handler {
+func MakeHTTPHandler(ctx context.Context, ps PathService, logger log.Logger, psStat *PathServiceStat) http.Handler {
 	opts := []httptransport.ServerOption{
 		httptransport.ServerErrorLogger(logger),
 		httptransport.ServerErrorEncoder(encodeError),
@@ -22,7 +22,7 @@ func MakeHTTPHandler(ctx context.Context, ps PathService, logger log.Logger) htt
 
 	shortestPathHandler := httptransport.NewServer(
 		ctx,
-		makeShortestPathEndpoint(ps),
+		makeShortestPathEndpoint(ps, psStat),
 		decodeShortestPathRequest,
 		encodeResponse,
 		opts...,

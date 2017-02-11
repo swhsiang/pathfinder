@@ -1,6 +1,9 @@
 package pathfinder
 
-import "github.com/marcusolsson/pathfinder/path"
+import (
+	"github.com/go-kit/kit/metrics"
+	"github.com/marcusolsson/pathfinder/path"
+)
 
 // PathService provides the shortest path "algoritm".
 type PathService interface {
@@ -9,8 +12,21 @@ type PathService interface {
 
 type pathService struct{}
 
+type PathServiceStat struct {
+	requestLatency metrics.Histogram
+	requestCount   metrics.Counter
+}
+
 func NewPathService() PathService {
 	return pathService{}
+}
+
+// NewPathServiceStat rerutn instance of pathServiceStat
+func NewPathServiceStat(counter metrics.Counter, latency metrics.Histogram) *PathServiceStat {
+	return &PathServiceStat{
+		requestLatency: latency,
+		requestCount:   counter,
+	}
 }
 
 func (pathService) ShortestPath(origin, destination string) ([]path.TransitPath, error) {
