@@ -18,14 +18,26 @@ import (
 	stdinfluxdb "github.com/influxdata/influxdb/client/v2"
 )
 
-const defaultPort = "8080"
+const (
+	defaultPort             = "8080"
+	defaultInfluxdbURL      = "http://influxdb:8086"
+	defaultInfluxdbUsername = "root"
+	defaultInfluxdbPassword = "random"
+)
 
 func main() {
 	var (
+		influxdbURLEnv      = envString("INFLUXDB_URL", defaultInfluxdbURL)
+		influxdbUsernameEnv = envString("INFLUXDB_USERNAME", defaultInfluxdbUsername)
+		influxdbPasswordEnv = envString("INFLUXDB_PASSWORD", defaultInfluxdbPassword)
+
+		influxdbURL      = flag.String("influxdb.url", influxdbURLEnv, "address of influxdb")
+		influxdbUsername = flag.String("influxdb.username", influxdbUsernameEnv, "username of influxdb")
+		influxdbPassword = flag.String("influxdb.password", influxdbPasswordEnv, "password of influxdb")
+
 		addr     = envString("PORT", defaultPort)
 		httpAddr = flag.String("http.addr", ":"+addr, "HTTP listen address")
-
-		ctx = context.Background()
+		ctx      = context.Background()
 	)
 
 	flag.Parse()
@@ -34,17 +46,19 @@ func main() {
 	logger = log.NewLogfmtLogger(os.Stderr)
 	logger = log.NewContext(logger).With("ts", log.DefaultTimestampUTC)
 
-	// FIXME refactor the initiation of influxdb
+	// Init the connection of influxdb
 	client, err := stdinfluxdb.NewHTTPClient(stdinfluxdb.HTTPConfig{
-		Addr:     "http://localhost:8086",
-		Username: "user123",
-		Password: "user123",
+		Addr:     *influxdbURL,
+		Username: *influxdbUsername,
+		Password: *influxdbPassword,
 	})
 
 	if err != nil {
-		logger.Log("influxdb", "connectTo", "http://influxdb:8086", "failed")
+		fmt.Println("address of influxdb", *influxdbURL, "username", *influxdbUsername, "password", *influxdbPassword, "error message", err)
+
 	} else {
-		fmt.Println("Connect to influxdb.")
+		fmt.Println("address of influxdb", *influxdbURL, "username", *influxdbUsername, "password", *influxdbPassword)
+
 	}
 
 	pathServiceInfluxdb := kitinfluxdb.New(map[string]string{"namespace": "api", "subsystem": "pathfinder_service"}, stdinfluxdb.BatchPointsConfig{
